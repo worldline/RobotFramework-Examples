@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="RobotFramework-Examples",
-    version="0.0.1",
+    version="0.0.2",
     author="Vernon Crabtree",
     author_email="vernon.b.crabtree@gmail.com",
     description="Examples in Robot Framework. Expands example data to individual test cases",
