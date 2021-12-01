@@ -25,11 +25,11 @@ jobs:
         run: |
           pip install robotframework
           pip install .
-          libdoc Examples Examples.html
+          libdoc Examples docs/Examples.html
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         # if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Examples.html
+          publish_dir: ./docs
