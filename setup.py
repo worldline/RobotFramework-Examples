@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name="Examples",
+    name="RobotFramework-Examples",
     version="0.0.1",
     description="Examples in Robot Framework. Expands example data to individual test cases",
     packages=['.'],
