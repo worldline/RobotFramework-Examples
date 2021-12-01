@@ -6,5 +6,5 @@ setup(
     description="Examples in Robot Framework. Expands example data to individual test cases",
     packages=['.'],
     python_requires='>=3.8',
-    install_requires=['robotframework']
+    install_requires=['robotframework', 'pandas', 'sqlalchemy']
 )
