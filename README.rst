@@ -5,6 +5,7 @@ Support for Examples: in Robot Framework like in other BDD style test frameworks
 An example of a test case looks like this:
 
 .. code:: robotframework
+
     *** Settings ***
     Library    Examples
 
@@ -16,6 +17,7 @@ An example of a test case looks like this:
                 ...    Joe       the world!
                 ...    Arthur    Camelot (clip clop).
                 ...    Patsy     it's only a model!
+
 
 Keyword information can be found here: 
 .. _Keywords: https://worldline.github.io/RobotFramework-Examples

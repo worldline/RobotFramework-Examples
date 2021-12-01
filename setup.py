@@ -5,7 +5,7 @@ with open("README.rst", "r", encoding="utf-8") as fh:
 
 setup(
     name="RobotFramework-Examples",
-    version="0.0.4",
+    version="0.0.5",
     author="Vernon Crabtree",
     author_email="vernon.b.crabtree@gmail.com",
     description="Examples in Robot Framework. Expands example data to individual test cases",
