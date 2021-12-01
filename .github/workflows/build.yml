@@ -16,11 +16,16 @@ jobs:
           submodules: true  # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
-      - name: Build
+      - name: Build docs
         run: |
           pip install robotframework
           pip install .
           libdoc Examples docs/index.html
+
+      - name: Build target
+        run: |
+          pip install build
+          python -m build
 
       - name: Deploy to GitHub Pages
         if: success()
