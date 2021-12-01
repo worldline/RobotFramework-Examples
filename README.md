@@ -18,4 +18,4 @@ My test with examples for ${name}
             ...    Patsy     it's only a model!
 ```
 
-Keyword information can be found here: https://worldline.github.io/RobotFramework-Examples
+Keyword information can be found here: [Keywords](https://worldline.github.io/RobotFramework-Examples)

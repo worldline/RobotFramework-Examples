@@ -8,4 +8,4 @@ My test with examples for ${name}
     Examples:    name      where welcome    --
             ...    Joe       the world!
             ...    Arthur    Camelot (clip clop).
-            ...    Patsy     it's only a model!"""
+            ...    Patsy     it's only a model!
