@@ -20,7 +20,7 @@ jobs:
         run: |
           pip install robotframework
           pip install .
-          libdoc Examples docs/Examples.html
+          libdoc Examples docs/index.html
 
       - name: Deploy to GitHub Pages
         if: success()
