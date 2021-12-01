@@ -1,11 +1,11 @@
 from setuptools import setup
 
-with open("README.md", "r", encoding="utf-8") as fh:
+with open("README.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name="RobotFramework-Examples",
-    version="0.0.3",
+    version="0.0.4",
     author="Vernon Crabtree",
     author_email="vernon.b.crabtree@gmail.com",
     description="Examples in Robot Framework. Expands example data to individual test cases",
