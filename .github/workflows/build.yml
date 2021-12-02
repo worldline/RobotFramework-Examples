@@ -29,6 +29,7 @@ jobs:
 
       - name: Robot Framework
         uses: joonvena/robotframework-docker-action@v1.0
+        robot_tests_dir: Tests
 
       - name: Publish a Python distribution to PyPI
         if: success()
