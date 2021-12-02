@@ -6,35 +6,53 @@ import random
 
 class Examples(object):
     """Examples library adds support of a list of Example test data to Robot Framewok test cases.
+
     With Examples, a Data driven test case can be defined where the data and the test process
     are kept together in the same part of the test case definition file, eliminating a
     cognitive split between these parts of a test scenario definition.
 
     Unlike template test cases, multiple similar scenarios can be present in the same robot file.
-    
+
     To use the Examples: keyword, this library must be referenced in the test suite. 
     As long as autoexpand is not set to false, Expand Test Examples (below) is automatically called.
     An example of a test case defined with Examples:
-    
-    *** Settings ***
-    Library    Examples
-    
-    *** Test cases ***
-    My test with examples for ${name}
-        Log    Hello ${name}, welcome to ${where welcome}    console=True
-        
-        Examples:    name      where welcome    --
-                ...    Joe       the world!
-                ...    Arthur    Camelot (clip clop).
-                ...    Patsy     it's only a model!"""
 
+    .. code:: robotframework
+        
+        *** Settings ***
+        Library    Examples
+        
+        *** Test cases ***
+        My test with examples for ${name}
+            Log    Hello ${name}, welcome to ${where welcome}    console=True
+            Examples:    name      where welcome    --
+                    ...    Joe       the world!
+                    ...    Arthur    Camelot (clip clop).
+                    ...    Patsy     it's only a model!
+
+    After expansion, this is equivalent to:
+
+    .. code:: robotframework
+
+        *** Test cases ***
+        My test with examples for Joe
+            Log    Hello Joe, welcome to the world!    console=True
+
+        My test with examples for Arthur
+            Log    Hello Arthur, welcome to Camelot (clip clop).    console=True
+            
+        My test with examples for Patsy
+            Log    Hello Patsy, welcome to it's only a model    console=True
+    """
+    ROBOT_LIBRARY_DOC_FORMAT = 'reST'
     ROBOT_LISTENER_API_VERSION = 3
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
 
     def __init__(self, autoexpand=True, max_examples=None, random=None):
         """max_example and random can be specified globally as described above.
+
         These arguments can be over-ridden for individual calls to Expand Test Examples.
-        
+
         In certain scenario's, data may be retrieved from external sources or defined by other keywords.
         When this is needed, Library Examples should have autoexpand=False.
         In this case, the variables needed for the example data to be resolved can be defined first during
@@ -68,8 +86,9 @@ class Examples(object):
 
         return variables
 
-    def examples(self):
-        """This keyword is never be called. This keyword searched for and removed by Expand test examples."""
+    def examples(self, *examples_data):
+        """This keyword is not called. This keyword is searched for and removed by Expand test examples.
+        The arguments are expanded to create concrete test cases as described by Expand Test Examples."""
         BuiltIn().fail('Expand Test Examples should be called in Suite setup.')
 
     def expand_test_examples(self, max_examples=None, random=None):
@@ -82,16 +101,16 @@ class Examples(object):
         - A new test case is created for each row in the table of examples.
         - If max_examples is specified, no more than max_examples test cases are produced for this scenario.
         - When random is specified, the examples are chosen in a random order. 
-            If this is a number, it is also used as max_examples.
+        If this is a number, it is also used as max_examples.
         - The new test case is search for variables where the variable name matches a coloumn header name.
-            When a matching variable name is found, it is replaced with the example value.
+        When a matching variable name is found, it is replaced with the example value.
         - Any variables in scope at the time of example replacement (e.g. global variables) are replaced as
-            actual values in the test.
+        actual values in the test.
         - Test case name is searched and replaced. This is necessary for Robot Framework to have unique test
-            names.
+        names.
         - Keyword names, argument values, Tags, IF conditions and FOR loops arguments are replaced 
-            with variable values in scope at the time of replacement.
-    
+        with variable values in scope at the time of replacement.
+
         Optional argument random can be used to specify that examples should be in a random order.
         When random is an integer and max_examples is not specified, it will be used as the number of examples to choose.
 
