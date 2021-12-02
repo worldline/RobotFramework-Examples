@@ -40,14 +40,14 @@ jobs:
           path: test_results/*
 
       - name: Publish a Python distribution to PyPI
-        if: success()
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
 
       - name: Deploy to GitHub Pages
-        if: success()
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: crazy-max/ghaction-github-pages@v2
         with:
           target_branch: gh-pages
