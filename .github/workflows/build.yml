@@ -27,10 +27,17 @@ jobs:
           pip install build
           python -m build
 
-      - name: Robot Framework
-        uses: joonvena/robotframework-docker-action@v1.0
+      - name: Run tests
+        run: |
+          mkdir test_results
+          cd test_results
+          robot ../Tests
+
+      - name: Archive test results
+        uses: actions/upload-artifact@v2
         with:
-          robot_tests_dir: Tests
+          name: test-report
+          path: test_results/*
 
       - name: Publish a Python distribution to PyPI
         if: success()
