@@ -1,0 +1,56 @@
+on:
+  push:
+    branches:
+      - main  # Set a branch name to trigger deployment
+      - buildexperiments
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Build docs
+        run: |
+          pip install robotframework
+          pip install .
+          libdoc Examples docs/index.html
+
+      - name: Build target
+        run: |
+          pip install build
+          python -m build
+
+      - name: Run tests
+        run: |
+          mkdir test_results
+          cd test_results
+          robot ../Tests
+
+      - name: Archive test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: test_results/*
+
+      - name: Publish a Python distribution to PyPI
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Deploy to GitHub Pages
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: docs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
