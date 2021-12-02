@@ -68,8 +68,14 @@ class Examples(object):
 
         return variables
 
+    def examples(self):
+        """This keyword is never be called. This keyword searched for and removed by Expand test examples."""
+        BuiltIn().fail('Expand Test Examples should be called in Suite setup.')
+
     def expand_test_examples(self, max_examples=None, random=None):
-        """The "Examples:" keyword is searched for in test cases. When Examples: is found, the following occurs:
+        """The "Examples:" keyword is searched for in test cases by this keyword, Either automatically
+        by the library import, or explicitly when autoexpand is False. 
+        When Examples: is found, the following occurs:
         - Column headers are determined as the first arguments before the '--' delimiter argument
         - Data rows are combined with the headers to form a dataframe.
         - The number of data arguments MUST be an exact multiple of the number of headers.

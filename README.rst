@@ -19,5 +19,7 @@ An example of a test case looks like this:
                 ...    Patsy     it's only a model!
 
 
-Keyword information can be found here: 
+Keyword information can be found here: `Keywords`_
+
+
 .. _Keywords: https://worldline.github.io/RobotFramework-Examples
