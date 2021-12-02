@@ -34,5 +34,5 @@ setup(
     project_urls={
         "Examples": "https://github.com/worldline/RobotFramework-Examples",
     },    
-    install_requires=['robotframework', 'pandas', 'sqlalchemy']
+    install_requires=['robotframework', 'pandas', 'sqlalchemy', 'docutils']
 )
