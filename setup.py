@@ -20,7 +20,7 @@ Framework :: Robot Framework :: Library
 
 setup(
     name="RobotFramework-Examples",
-    version="0.1.0",
+    version="0.1.1",
     author="Vernon Crabtree",
     author_email="vernon.b.crabtree@gmail.com",
     description="Examples in Robot Framework. Expands example data to individual test cases",
