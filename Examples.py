@@ -1,4 +1,5 @@
 from robot.running.model import TestSuite
+from robot.model.testcase import TestCases
 from robot.libraries.BuiltIn import BuiltIn
 from robot.running.context import EXECUTION_CONTEXTS
 from robot.api import logger
@@ -135,15 +136,16 @@ class Examples(object):
         self._expand_tcs_in_suite(self.current_suite)
 
     def _expand_tcs_in_suite(self, suite):
-        replacement_tests = []
-        for tc in suite.tests:
+        current_tests = suite.tests
+        suite.tests = TestCases()
+        for tc in current_tests:
             if not self._expand_example_tc(tc):
-                replacement_tests.append(tc)
-        self.current_suite.tests = replacement_tests
+                suite.tests.append(tc)
         for suite in suite.suites:
             self._expand_tcs_in_suite(suite)
 
     def _expand_example_tc(self, example_tc):
+        self.example_tc = example_tc
         for kw in example_tc.body:
             try:
                 if kw.name.lower() == 'examples:':
@@ -160,6 +162,7 @@ class Examples(object):
             example_data = records[0:self._max_examples]
 
         self.variables = self._localise_scope()
+        self.first_tc = True
         for example in example_data:
             self.variables.current.store.data.update(example)
             filled_tc = self.current_suite.tests.create(self.variables.replace_scalar(example_tc.name, ignore_errors=True))
@@ -167,18 +170,20 @@ class Examples(object):
             filled_tc.teardown = example_tc.teardown
             filled_tc.tags = self.replace_list(example_tc.tags)
             self._populate_example_to_body(example_tc.body, filled_tc.body)
+            self.first_tc = False
 
         self.variables.end_keyword()
         return True
 
     def _populate_example_to_body(self, body, target):
         for kw in body:
+            self.kw = kw
             if kw.type == 'KEYWORD':
                 if kw.name.lower() == 'examples:':
                     continue
                 target.create_keyword(self.variables.replace_scalar(kw.name, ignore_errors=True), 
                         args = self.replace_list(kw.args),
-                        assign=self.replace_list(kw.assign),
+                        assign=kw.assign,
                         tags=self.replace_list(kw.tags),
                         timeout=kw.timeout,
                         lineno=kw.lineno)
@@ -188,7 +193,7 @@ class Examples(object):
                 if hasattr(new_kw, 'values'):
                     new_kw.values = self.replace_list(kw.values)
                 if hasattr(new_kw, 'condition'):
-                    new_kw.condition = self.ariables.replace_scalar(kw.condition, ignore_errors=True)
+                    new_kw.condition = self.variables.replace_scalar(kw.condition, ignore_errors=True)
                     # TODO: replacement for IF is also necessary - I currently don't have an example of this use-case to test
                 self._populate_example_to_body(kw.body, new_kw.body)
                 target.append(new_kw)
@@ -198,5 +203,6 @@ class Examples(object):
             return self.variables.replace_list(args)
         except VariableError as e:
             result = self.variables.replace_list(args, ignore_errors=True)
-            logger.info(f'{e}.\nCurrent result is {result}')
+            if self.first_tc:
+                logger.info(f'Replacing in tc {self.example_tc.longname}, line {self.kw.lineno}\n{e}\nCurrent result is {result}')
             return result
